@@ -31,8 +31,8 @@ class RegisterUserRequest extends FormRequestApi
             'last_name' =>  'required|string|max:255',
             'email' => 'required:email',
             'phone_number' =>  'required|numeric',
-            'password' => 'required|alpha_num|min:8|confirmed',
-            'password_confirmation' => 'required|alpha_num',
+           'password' => 'required|alpha_num|min:8|confirmed',
+           'password_confirmation' => 'required|alpha_num',
         ];
     }
 }

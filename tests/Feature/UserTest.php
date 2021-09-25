@@ -16,28 +16,86 @@ class UserTest extends TestCase
      *
      * @return void
      */
+    protected $user;
+
+    public function setUp():void {
+       parent::setUp();
+
+       $this->user = User::factory()->create();
+
+       $this->user = $this->user->toArray();
+       $this->user['password'] = 'password';
+
+       /**
+        * Login user to gain authourization
+        */
+
+        $response = $this->json('POST', route('api.user.login'), $this->user);
+       
+       $this->withoutExceptionHandling(); 
+
+    }
+
     public function test_can_register_user()
     { 
-        /**
-         * Due to electricity issues 
-         * I did not have enough time to complete the hassob assessment
-         *
-         * With additional time, i will be able to complete the model 
-         * Php Unit test for all position end point
-         * 
-         * I will be glad if i am cosinder for the Job. 
-         * Thanks 
-         *              Your faithfully
-         *              Philip James Ajagabos
-         *              ajagabos@gmail.com
-         *              08030408652
-         *
-         */
-        $user = User::factory(1)->create();
-        
-        $this->withoutExceptionHandling(); 
+        $this->user = User::factory()->make();
+        $this->user = $this->user->toArray();
 
-        $response = $this->json('POST', route('api.register'), $user->toArray());
+        /**
+         * add hidden fields 'password' and 'password_confirmation' 
+        */
+
+        $this->user['password'] = 'password';
+        $this->user['password_confirmation'] = $this->user['password'];
+
+        $response = $this->json('POST', route('api.register'), $this->user);
         $response->assertStatus(200);
+        $response->dump();
+
+    }
+
+    public function test_can_login_user(){
+
+        $response = $this->json('POST', route('api.user.login'), $this->user);
+        $response->assertStatus(200);
+        $response->dump();
+
+    }
+
+    public function test_can_view_profile(){
+
+        //view profile 
+        $response = $this->json('POST', route('api.user.profile'));
+        $response->assertStatus(200);
+        $response->dump();
+
+    }
+
+    public function test_can_logout_user(){
+
+        //Attempt Logout for an authourized user
+        $response = $this->json('POST', route('api.user.logout'));
+        $response->assertStatus(200);
+        $response->dump();
+
+    }
+
+    public function test_can_create_user(){
+       
+        $newUser = User::factory()->make();
+        $newUser = $newUser->toArray();
+
+        /**
+         * add hidden fields 'password' and 'password_confirmation' 
+        */
+
+        $newUser['password'] = 'password';
+        $newUser['password_confirmation'] = $newUser['password'];
+
+        $response = $this->json('POST', route('user.store'), $newUser);
+        $response->assertStatus(200);
+
+        $response->dump();
+
     }
 }

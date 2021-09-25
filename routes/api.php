@@ -25,10 +25,10 @@ Route::group([
     'prefix' => 'user',
     'name' => 'user'
 ], function ($router) {
-    Route::post('login', 'AuthController@login');
-    Route::post('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('profile', 'AuthController@profile');
+    Route::post('login', 'AuthController@login')->name('api.user.login');
+    Route::post('logout', 'AuthController@logout')->name('api.user.logout');
+    Route::post('refresh', 'AuthController@refresh')->name('api.user.refresh');
+    Route::post('profile', 'AuthController@profile')->name('api.user.profile');
 });
 
 Route::resource('user',App\Http\Controllers\UserController::class)->except(['edit','create']);
